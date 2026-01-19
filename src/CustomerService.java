@@ -27,6 +27,76 @@ public class CustomerService {
         }
     }
 
+    public static void deleteCustomer() {
+        try (Connection con = DBConnection.getConnection()) {
+
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Do you want to Remove / Inactive the customer? ");
+            System.out.print("Remove - (R) Inactive - (I) : ");
+            String choice = sc.nextLine();
+            if (choice.equalsIgnoreCase("R")){
+                System.out.print("Please enter the customer name : ");
+                String csname = sc.nextLine();
+                System.out.print("Please enter the customer ID : ");
+                int csid = sc.nextInt();
+
+                PreparedStatement st = con.prepareStatement("SELECT * FROM customers where customer_name = ? AND customer_id = ? AND customer_status = 'A'");
+                st.setString(1, csname);
+                st.setInt(2, csid);
+                ResultSet rs = st.executeQuery();
+
+                boolean hasRows = false;
+
+                if (rs.next()) {
+                    hasRows = true;
+                }
+
+                if (!hasRows){
+                    System.out.println("No customer/No active customer found under the name **"+csname+"** with ID **"+csid+"**");
+                }
+                else {
+                    PreparedStatement ps = con.prepareStatement("DELETE customers WHERE customer_name = ? AND customer_id = ? AND customer_status = 'A'");
+                    ps.setString(1, csname);
+                    ps.setInt(2, csid);
+                    ps.executeUpdate();
+
+                    System.out.println("Customer "+csname+" delete successfully");
+                }
+            } else if (choice.equalsIgnoreCase("I")) {
+                System.out.print("Please enter the customer name : ");
+                String csname = sc.nextLine();
+                System.out.print("Please enter the customer ID : ");
+                int csid = sc.nextInt();
+
+                PreparedStatement st = con.prepareStatement("SELECT * FROM customers where customer_name = ? AND customer_id = ? AND customer_status = 'A'");
+                st.setString(1, csname);
+                st.setInt(2, csid);
+                ResultSet rs = st.executeQuery();
+
+                boolean hasRows = false;
+
+                if (rs.next()){
+                    hasRows = true;
+                }
+
+                if (!hasRows){
+                    System.out.println("No customer/No active customer found under the name **"+csname+"** with ID **"+csid+"**");
+                }
+                else {
+                    PreparedStatement ps = con.prepareStatement("UPDATE customers SET customer_status = 'I' WHERE customer_name = ? AND customer_id = ? AND customer_status = 'A'");
+                    ps.setString(1, csname);
+                    ps.setInt(2, csid);
+                    ps.executeUpdate();
+
+                    System.out.println("Customer "+csname+" deactivated successfully");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void viewCustomers() {
         try (Connection con = DBConnection.getConnection()) {
 

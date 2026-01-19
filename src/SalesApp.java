@@ -15,6 +15,7 @@ public class SalesApp {
             System.out.println("4. View Products");
             System.out.println("5. Create Sale");
             System.out.println("6. View Sales");
+            System.out.println("7. Remove Customer");
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
 
@@ -27,6 +28,7 @@ public class SalesApp {
                 case 4 -> ProductService.viewProducts();
                 case 5 -> SalesService.createSale();
                 case 6 -> SalesService.viewSales();
+                case 7 -> CustomerService.deleteCustomer();
                 case 0 -> System.out.println("Exiting...");
                 default -> System.out.println("Invalid choice!");
             }
